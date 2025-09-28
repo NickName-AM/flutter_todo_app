@@ -9,4 +9,6 @@ abstract interface class TodoRepository {
     required String startTime,
     required String endTime,
   });
+
+  Future<Either<Failure, List<Todo>>> getAllTodos();
 }

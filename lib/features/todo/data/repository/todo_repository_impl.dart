@@ -2,7 +2,6 @@ import 'package:flutter_todo_app/core/errors/exceptions.dart';
 import 'package:flutter_todo_app/core/errors/failure.dart';
 import 'package:flutter_todo_app/features/todo/data/datasources/todo_remote_data_source.dart';
 import 'package:flutter_todo_app/features/todo/data/models/todo_model.dart';
-import 'package:flutter_todo_app/features/todo/domain/entities/todo.dart';
 import 'package:flutter_todo_app/features/todo/domain/repository/todo_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -12,7 +11,7 @@ class TodoRepositoryImpl implements TodoRepository {
   TodoRepositoryImpl({required this.todoRemoteDataSource});
 
   @override
-  Future<Either<Failure, Todo>> createTodo({
+  Future<Either<Failure, TodoModel>> createTodo({
     required String title,
     required String date,
     required String startTime,
@@ -27,6 +26,17 @@ class TodoRepositoryImpl implements TodoRepository {
       );
 
       return right(await todoRemoteDataSource.createTodo(todoModel));
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TodoModel>>> getAllTodos() async {
+    try {
+      final todos = await todoRemoteDataSource.getAllTodos();
+
+      return right(todos);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

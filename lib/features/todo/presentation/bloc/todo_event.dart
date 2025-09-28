@@ -16,3 +16,5 @@ class TodoCreateRequested extends TodoEvent {
     required this.endTime,
   });
 }
+
+class TodoListRequested extends TodoEvent {}

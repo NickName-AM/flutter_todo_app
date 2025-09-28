@@ -15,8 +15,8 @@ class TodoModel extends Todo {
     return <String, dynamic>{
       'title': title,
       'date': date,
-      'startTime': startTime,
-      'endTime': endTime,
+      'start_time': startTime,
+      'end_time': endTime,
     };
   }
 
@@ -24,8 +24,8 @@ class TodoModel extends Todo {
     return TodoModel(
       title: map['title'] as String,
       date: map['date'] as String,
-      startTime: map['startTime'] as String,
-      endTime: map['endTime'] as String,
+      startTime: map['start_time'] as String,
+      endTime: map['end_time'] as String,
     );
   }
 

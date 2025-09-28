@@ -29,7 +29,9 @@ class _TimePickerState extends State<TimePicker> {
             initialTime: _selectedTime ?? TimeOfDay.now(),
           );
           if (picked != null && picked != _selectedTime) {
-            widget.timeController.text = picked.format(context);
+            widget.timeController.text = MaterialLocalizations.of(
+              context,
+            ).formatTimeOfDay(picked, alwaysUse24HourFormat: true);
           }
           setState(() {});
         },

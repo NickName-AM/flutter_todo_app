@@ -13,6 +13,12 @@ final class TodoCreateSuccess extends TodoState {
   TodoCreateSuccess({required this.todo});
 }
 
+final class TodoListSuccess extends TodoState {
+  final List<Todo> todos;
+
+  TodoListSuccess({required this.todos});
+}
+
 final class TodoFailure extends TodoState {
   final String message;
 

@@ -1,16 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todo_app/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:flutter_todo_app/features/todo/presentation/widgets/simple_text_field.dart';
 import 'package:flutter_todo_app/features/todo/presentation/widgets/time_picker.dart';
+import 'package:intl/intl.dart';
 
-class CreateTodo extends StatefulWidget {
-  CreateTodo({Key? key}) : super(key: key);
+class CreateTodoActivity extends StatefulWidget {
+  CreateTodoActivity({Key? key}) : super(key: key);
 
   @override
-  State<CreateTodo> createState() => _CreateTodoState();
+  State<CreateTodoActivity> createState() => _CreateTodoActivityState();
 }
 
-class _CreateTodoState extends State<CreateTodo> {
+class _CreateTodoActivityState extends State<CreateTodoActivity> {
   final titleController = TextEditingController();
   final startTimeController = TextEditingController();
   final endTimeController = TextEditingController();
@@ -106,7 +109,16 @@ class _CreateTodoState extends State<CreateTodo> {
           child: SizedBox(
             width: double.infinity,
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                context.read<TodoBloc>().add(
+                  TodoCreateRequested(
+                    title: titleController.text,
+                    date: DateFormat('yyyy-MM-dd').format(_selectedDate),
+                    startTime: startTimeController.text,
+                    endTime: endTimeController.text,
+                  ),
+                );
+              },
               foregroundColor: Colors.white,
               backgroundColor: Color.fromRGBO(64, 68, 201, 1),
               child: Text("Create"),
