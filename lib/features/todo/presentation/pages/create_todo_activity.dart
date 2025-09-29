@@ -2,11 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo_app/features/todo/presentation/bloc/todo_bloc.dart';
+import 'package:flutter_todo_app/features/todo/presentation/pages/home_page.dart';
 import 'package:flutter_todo_app/features/todo/presentation/widgets/simple_text_field.dart';
 import 'package:flutter_todo_app/features/todo/presentation/widgets/time_picker.dart';
 import 'package:intl/intl.dart';
 
 class CreateTodoActivity extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (context) => CreateTodoActivity());
+
   CreateTodoActivity({Key? key}) : super(key: key);
 
   @override
@@ -21,8 +25,20 @@ class _CreateTodoActivityState extends State<CreateTodoActivity> {
   DateTime _selectedDate = DateTime.now();
 
   @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    startTimeController.dispose();
+    endTimeController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(64, 68, 201, 1),
+        foregroundColor: Colors.white,
+      ),
       body: Container(
         color: Color.fromRGBO(64, 68, 201, 1),
         child: Column(
@@ -117,6 +133,11 @@ class _CreateTodoActivityState extends State<CreateTodoActivity> {
                     startTime: startTimeController.text,
                     endTime: endTimeController.text,
                   ),
+                );
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  HomePage.route(),
+                  (route) => false,
                 );
               },
               foregroundColor: Colors.white,
