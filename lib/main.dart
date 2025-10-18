@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todo_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter_todo_app/features/auth/presentation/pages/login_page.dart';
-import 'package:flutter_todo_app/features/todo/data/datasources/todo_remote_data_source.dart';
-import 'package:flutter_todo_app/features/todo/data/repository/todo_repository_impl.dart';
-import 'package:flutter_todo_app/features/todo/domain/usecases/create_todo.dart';
-import 'package:flutter_todo_app/features/todo/domain/usecases/list_todos.dart';
+import 'package:flutter_todo_app/features/auth/presentation/pages/signup_page.dart';
+
 import 'package:flutter_todo_app/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:flutter_todo_app/features/todo/presentation/pages/home_page.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_todo_app/init_dependencies.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  initDependencies();
+
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => serviceLocator<TodoBloc>()),
+        BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,31 +28,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TodoBloc(
-        createTodo: CreateTodo(
-          todoRepository: TodoRepositoryImpl(
-            todoRemoteDataSource: TodoRemoteDataSourceImpl(
-              client: http.Client(),
-            ),
-          ),
-        ),
-        listTodos: ListTodos(
-          todoRepository: TodoRepositoryImpl(
-            todoRemoteDataSource: TodoRemoteDataSourceImpl(
-              client: http.Client(),
-            ),
-          ),
-        ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Todo App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Todo App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        ),
-        home: LoginPage(),
-      ),
+      home: LoginPage(),
+      // home: HomePage(),
     );
   }
 }

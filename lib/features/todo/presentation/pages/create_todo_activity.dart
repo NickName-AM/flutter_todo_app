@@ -34,124 +34,136 @@ class _CreateTodoActivityState extends State<CreateTodoActivity> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(64, 68, 201, 1),
-        foregroundColor: Colors.white,
-      ),
-      body: Container(
-        color: Color.fromRGBO(64, 68, 201, 1),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              // height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 30.0,
-                vertical: 60,
-              ),
-              child: Text(
-                "Create Todo",
-                style: TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+    return BlocListener<TodoBloc, TodoState>(
+      listener: (context, state) {
+        if (state is TodoCreateSuccess) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            HomePage.route(),
+            (route) => false,
+          );
+        } else if (state is TodoFailure) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Failed to create todo.')));
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(64, 68, 201, 1),
+          foregroundColor: Colors.white,
+        ),
+        body: Container(
+          color: Color.fromRGBO(64, 68, 201, 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                // height: 50,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30.0,
+                  vertical: 60,
+                ),
+                child: Text(
+                  "Create Todo",
+                  style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30)),
-                  color: Colors.white,
-                ),
-                padding: EdgeInsets.all(30),
-                // color: Colors.white,
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 16),
-                        SimpleTextField(
-                          titleController: titleController,
-                          hintText: "Title",
-                        ),
-                        SizedBox(height: 30),
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            colorScheme: ColorScheme.light(
-                              primary: Color.fromRGBO(64, 68, 201, 1),
-                              onPrimary: Colors.blue,
-                              onSurface: Colors.black,
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                    ),
+                    color: Colors.white,
+                  ),
+                  padding: EdgeInsets.all(30),
+                  // color: Colors.white,
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 16),
+                          SimpleTextField(
+                            titleController: titleController,
+                            hintText: "Title",
+                          ),
+                          SizedBox(height: 30),
+                          Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: Color.fromRGBO(64, 68, 201, 1),
+                                onPrimary: Colors.blue,
+                                onSurface: Colors.black,
+                              ),
+                            ),
+                            child: CalendarDatePicker(
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              onDateChanged: (date) {
+                                _selectedDate = date;
+                              },
                             ),
                           ),
-                          child: CalendarDatePicker(
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                            onDateChanged: (date) {
-                              _selectedDate = date;
-                            },
+                          TimePicker(
+                            text: "Start Time",
+                            timeController: startTimeController,
                           ),
-                        ),
-                        TimePicker(
-                          text: "Start Time",
-                          timeController: startTimeController,
-                        ),
-                        SizedBox(height: 20),
-                        TimePicker(
-                          text: "End time",
-                          timeController: endTimeController,
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          color: Colors.white,
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: FloatingActionButton(
-                              onPressed: () {
-                                // Validation
-                                if (titleController.text.isEmpty ||
-                                    startTimeController.text.isEmpty ||
-                                    endTimeController.text.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text("Fields cannot be empty"),
+                          SizedBox(height: 20),
+                          TimePicker(
+                            text: "End time",
+                            timeController: endTimeController,
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            color: Colors.white,
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  // Validation
+                                  if (titleController.text.isEmpty ||
+                                      startTimeController.text.isEmpty ||
+                                      endTimeController.text.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text("Fields cannot be empty"),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  context.read<TodoBloc>().add(
+                                    TodoCreateRequested(
+                                      title: titleController.text,
+                                      date: DateFormat(
+                                        'yyyy-MM-dd',
+                                      ).format(_selectedDate),
+                                      startTime: startTimeController.text,
+                                      endTime: endTimeController.text,
                                     ),
                                   );
-                                  return;
-                                }
-
-                                context.read<TodoBloc>().add(
-                                  TodoCreateRequested(
-                                    title: titleController.text,
-                                    date: DateFormat(
-                                      'yyyy-MM-dd',
-                                    ).format(_selectedDate),
-                                    startTime: startTimeController.text,
-                                    endTime: endTimeController.text,
-                                  ),
-                                );
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  HomePage.route(),
-                                  (route) => false,
-                                );
-                              },
-                              foregroundColor: Colors.white,
-                              backgroundColor: Color.fromRGBO(64, 68, 201, 1),
-                              child: Text("Create"),
+                                },
+                                foregroundColor: Colors.white,
+                                backgroundColor: Color.fromRGBO(64, 68, 201, 1),
+                                child: Text("Create"),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

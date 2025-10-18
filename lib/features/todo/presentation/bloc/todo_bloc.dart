@@ -50,9 +50,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   ) async {
     final res = await _listTodos(NoParams());
 
-    res.fold(
-      (failure) => emit(TodoFailure(message: "Failed to get todos.")),
-      (todos) => emit(TodoListSuccess(todos: todos)),
-    );
+    res.fold((failure) => emit(TodoFailure(message: "Failed to get todos.")), (
+      todos,
+    ) {
+      if (todos.isEmpty) {
+        emit(TodoFailure(message: "No Todos today"));
+      } else {
+        emit(TodoListSuccess(todos: todos));
+      }
+    });
   }
 }

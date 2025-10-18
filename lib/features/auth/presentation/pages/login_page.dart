@@ -5,6 +5,8 @@ import 'package:flutter_todo_app/features/auth/presentation/widgets/auth_select_
 import 'package:flutter_todo_app/features/auth/presentation/widgets/submit_button.dart';
 
 class LoginPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (context) => LoginPage());
+
   const LoginPage({super.key});
 
   @override
@@ -32,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => SignupPage()),
+                      SignupPage.route(),
                       (route) => false,
                     );
                   },
