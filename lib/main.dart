@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todo_app/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter_todo_app/features/todo/data/datasources/todo_remote_data_source.dart';
 import 'package:flutter_todo_app/features/todo/data/repository/todo_repository_impl.dart';
 import 'package:flutter_todo_app/features/todo/domain/usecases/create_todo.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
-        home: HomePage(),
+        home: LoginPage(),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_todo_app/features/todo/domain/entities/todo.dart';
 
 class TodoModel extends Todo {
   TodoModel({
+    super.id,
     required super.title,
     required super.date,
     required super.startTime,
@@ -22,6 +23,7 @@ class TodoModel extends Todo {
 
   factory TodoModel.fromMap(Map<String, dynamic> map) {
     return TodoModel(
+      id: map['id'].toString(),
       title: map['title'] as String,
       date: map['date'] as String,
       startTime: map['start_time'] as String,

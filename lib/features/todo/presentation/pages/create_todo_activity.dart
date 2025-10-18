@@ -95,19 +95,55 @@ class _CreateTodoActivityState extends State<CreateTodoActivity> {
                             },
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TimePicker(
-                              text: "Start Time",
-                              timeController: startTimeController,
+                        TimePicker(
+                          text: "Start Time",
+                          timeController: startTimeController,
+                        ),
+                        SizedBox(height: 20),
+                        TimePicker(
+                          text: "End time",
+                          timeController: endTimeController,
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          color: Colors.white,
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: FloatingActionButton(
+                              onPressed: () {
+                                // Validation
+                                if (titleController.text.isEmpty ||
+                                    startTimeController.text.isEmpty ||
+                                    endTimeController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Fields cannot be empty"),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                context.read<TodoBloc>().add(
+                                  TodoCreateRequested(
+                                    title: titleController.text,
+                                    date: DateFormat(
+                                      'yyyy-MM-dd',
+                                    ).format(_selectedDate),
+                                    startTime: startTimeController.text,
+                                    endTime: endTimeController.text,
+                                  ),
+                                );
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  HomePage.route(),
+                                  (route) => false,
+                                );
+                              },
+                              foregroundColor: Colors.white,
+                              backgroundColor: Color.fromRGBO(64, 68, 201, 1),
+                              child: Text("Create"),
                             ),
-                            SizedBox(width: 20),
-                            TimePicker(
-                              text: "End time",
-                              timeController: endTimeController,
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -116,35 +152,6 @@ class _CreateTodoActivityState extends State<CreateTodoActivity> {
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
-          child: SizedBox(
-            width: double.infinity,
-            child: FloatingActionButton(
-              onPressed: () {
-                context.read<TodoBloc>().add(
-                  TodoCreateRequested(
-                    title: titleController.text,
-                    date: DateFormat('yyyy-MM-dd').format(_selectedDate),
-                    startTime: startTimeController.text,
-                    endTime: endTimeController.text,
-                  ),
-                );
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  HomePage.route(),
-                  (route) => false,
-                );
-              },
-              foregroundColor: Colors.white,
-              backgroundColor: Color.fromRGBO(64, 68, 201, 1),
-              child: Text("Create"),
-            ),
-          ),
         ),
       ),
     );

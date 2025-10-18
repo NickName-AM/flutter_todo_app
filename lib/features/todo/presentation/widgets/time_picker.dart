@@ -20,7 +20,7 @@ class _TimePickerState extends State<TimePicker> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
+      width: double.infinity,
       height: 50,
       child: ElevatedButton(
         onPressed: () async {

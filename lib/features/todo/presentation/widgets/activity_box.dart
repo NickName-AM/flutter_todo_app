@@ -1,14 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_todo_app/core/endpoint.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class ActivityBox extends StatefulWidget {
+  final String id;
   final String title;
   final String startTime;
   final String endTime;
 
   const ActivityBox({
     Key? key,
+    required this.id,
     required this.title,
     required this.startTime,
     required this.endTime,
@@ -88,29 +92,36 @@ class _ActivityBoxState extends State<ActivityBox> {
                         setState(() {
                           isChecked = value ?? false;
                         });
+                        http.delete(
+                          Uri.parse(
+                            "${Endpoint.endpoint}/todo/delete/${widget.id}/",
+                          ),
+                        );
                       },
                     ),
                     SizedBox(width: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.title,
-                          style: TextStyle(
-                            color: _isTapped ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: TextStyle(
+                              color: _isTapped ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          '${startTimeFormatted.format(context)} - ${endTimeFormatted.format(context)}',
-                          style: TextStyle(
-                            color: _isTapped ? Colors.white60 : Colors.grey,
-                            fontSize: 12,
+                          SizedBox(height: 2),
+                          Text(
+                            '${startTimeFormatted.format(context)} - ${endTimeFormatted.format(context)}',
+                            style: TextStyle(
+                              color: _isTapped ? Colors.white60 : Colors.grey,
+                              fontSize: 12,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

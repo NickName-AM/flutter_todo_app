@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todo_app/features/todo/domain/entities/todo.dart';
 import 'package:flutter_todo_app/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:flutter_todo_app/features/todo/presentation/pages/create_todo_activity.dart';
 import 'package:flutter_todo_app/features/todo/presentation/widgets/activity_box.dart';
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Todo> todos = [];
     return Scaffold(
       body: Container(
         color: Color.fromRGBO(64, 68, 201, 1),
@@ -81,7 +83,9 @@ class _HomePageState extends State<HomePage> {
                       return ListView.builder(
                         itemCount: state.todos.length,
                         itemBuilder: (context, index) {
+                          todos = state.todos;
                           return ActivityBox(
+                            id: state.todos[index].id!,
                             title: state.todos[index].title,
                             startTime: state.todos[index].startTime,
                             endTime: state.todos[index].endTime,
