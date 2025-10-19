@@ -14,3 +14,10 @@ final class AuthRegisterRequested extends AuthEvent {
     required this.password,
   });
 }
+
+final class AuthLoginRequested extends AuthEvent {
+  final String email;
+  final String password;
+
+  AuthLoginRequested({required this.email, required this.password});
+}

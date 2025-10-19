@@ -1,6 +1,9 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_todo_app/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:flutter_todo_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:flutter_todo_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:flutter_todo_app/features/auth/domain/repository/auth_repository.dart';
+import 'package:flutter_todo_app/features/auth/domain/usecases/login_user.dart';
 import 'package:flutter_todo_app/features/auth/domain/usecases/register_user.dart';
 import 'package:flutter_todo_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter_todo_app/features/todo/data/datasources/todo_remote_data_source.dart';
@@ -20,6 +23,7 @@ Future<void> initDependencies() async {
   _initAuth();
 
   serviceLocator.registerLazySingleton(() => http.Client());
+  serviceLocator.registerLazySingleton(() => FlutterSecureStorage());
 }
 
 void _initAuth() {
@@ -27,17 +31,30 @@ void _initAuth() {
     ..registerFactory<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(client: serviceLocator()),
     )
+    ..registerFactory<AuthLocalDataSource>(
+      () => AuthLocalDataSourceImpl(flutterSecureStorage: serviceLocator()),
+    )
     ..registerFactory<AuthRepository>(
-      () => AuthRepositoryImpl(authRemoteDataSource: serviceLocator()),
+      () => AuthRepositoryImpl(
+        authRemoteDataSource: serviceLocator(),
+        authLocalDataSource: serviceLocator(),
+      ),
     )
     ..registerFactory(() => RegisterUser(authRepository: serviceLocator()))
-    ..registerLazySingleton(() => AuthBloc(registeruser: serviceLocator()));
+    ..registerFactory(() => LoginUser(authRepository: serviceLocator()))
+    ..registerLazySingleton(
+      () =>
+          AuthBloc(registeruser: serviceLocator(), loginUser: serviceLocator()),
+    );
 }
 
 void _initTodo() {
   serviceLocator
     ..registerFactory<TodoRemoteDataSource>(
-      () => TodoRemoteDataSourceImpl(client: serviceLocator()),
+      () => TodoRemoteDataSourceImpl(
+        client: serviceLocator(),
+        flutterSecureStorage: serviceLocator(),
+      ),
     )
     ..registerFactory<TodoRepository>(
       () => TodoRepositoryImpl(todoRemoteDataSource: serviceLocator()),

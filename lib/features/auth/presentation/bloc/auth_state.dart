@@ -12,3 +12,11 @@ final class AuthRegisterFailure extends AuthState {
 
   AuthRegisterFailure({required this.message});
 }
+
+final class AuthLoginSuccess extends AuthState {}
+
+final class AuthLoginFailure extends AuthState {
+  final String message;
+
+  AuthLoginFailure({required this.message});
+}
