@@ -10,6 +10,7 @@ import 'package:flutter_todo_app/features/todo/data/datasources/todo_remote_data
 import 'package:flutter_todo_app/features/todo/data/repository/todo_repository_impl.dart';
 import 'package:flutter_todo_app/features/todo/domain/repository/todo_repository.dart';
 import 'package:flutter_todo_app/features/todo/domain/usecases/create_todo.dart';
+import 'package:flutter_todo_app/features/todo/domain/usecases/delete_todo.dart';
 import 'package:flutter_todo_app/features/todo/domain/usecases/list_todos.dart';
 import 'package:flutter_todo_app/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -61,7 +62,12 @@ void _initTodo() {
     )
     ..registerFactory(() => CreateTodo(todoRepository: serviceLocator()))
     ..registerFactory(() => ListTodos(todoRepository: serviceLocator()))
+    ..registerFactory(() => DeleteTodo(todoRepository: serviceLocator()))
     ..registerLazySingleton(
-      () => TodoBloc(createTodo: serviceLocator(), listTodos: serviceLocator()),
+      () => TodoBloc(
+        createTodo: serviceLocator(),
+        listTodos: serviceLocator(),
+        deleteTodo: serviceLocator(),
+      ),
     );
 }

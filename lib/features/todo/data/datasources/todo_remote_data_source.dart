@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 abstract interface class TodoRemoteDataSource {
   Future<TodoModel> createTodo(TodoModel todo);
   Future<List<TodoModel>> getAllTodos();
+  Future<void> deleteTodo(int id);
 }
 
 class TodoRemoteDataSourceImpl implements TodoRemoteDataSource {
@@ -66,6 +67,27 @@ class TodoRemoteDataSourceImpl implements TodoRemoteDataSource {
       final todoMapList = json.decode(res.body) as List;
 
       return todoMapList.map((e) => TodoModel.fromMap(e)).toList();
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteTodo(int id) async {
+    final url = Uri.parse("${Endpoint.endpoint}/todo/delete/$id/");
+
+    try {
+      final accessToken = await flutterSecureStorage.read(key: 'access_token');
+      if (accessToken == null) {
+        throw ServerException(
+          "User is not logged in. ('access_token' is missing.)",
+        );
+      }
+
+      final res = await client.delete(
+        url,
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
     } catch (e) {
       throw ServerException(e.toString());
     }

@@ -1,8 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_app/core/endpoint.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todo_app/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
 class ActivityBox extends StatefulWidget {
   final String id;
@@ -92,10 +91,8 @@ class _ActivityBoxState extends State<ActivityBox> {
                         setState(() {
                           isChecked = value ?? false;
                         });
-                        http.delete(
-                          Uri.parse(
-                            "${Endpoint.endpoint}/todo/delete/${widget.id}/",
-                          ),
+                        context.read<TodoBloc>().add(
+                          TodoDeleteRequested(id: int.parse(widget.id)),
                         );
                       },
                     ),

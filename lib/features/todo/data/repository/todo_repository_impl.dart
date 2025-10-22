@@ -41,4 +41,13 @@ class TodoRepositoryImpl implements TodoRepository {
       return left(Failure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteTodo({required int id}) async {
+    try {
+      return right(await todoRemoteDataSource.deleteTodo(id));
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
 }

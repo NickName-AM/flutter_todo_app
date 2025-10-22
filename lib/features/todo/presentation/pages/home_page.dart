@@ -23,7 +23,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<Todo> todos = [];
+    List<Todo> displayTodos = [];
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(64, 68, 201, 1),
+        foregroundColor: Colors.white,
+      ),
       body: Container(
         color: Color.fromRGBO(64, 68, 201, 1),
         child: Column(
@@ -85,10 +90,23 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           todos = state.todos;
                           return ActivityBox(
-                            id: state.todos[index].id!,
-                            title: state.todos[index].title,
-                            startTime: state.todos[index].startTime,
-                            endTime: state.todos[index].endTime,
+                            id: todos[index].id!,
+                            title: todos[index].title,
+                            startTime: todos[index].startTime,
+                            endTime: todos[index].endTime,
+                          );
+                        },
+                      );
+                    } else if (state is TodoDeleteSuccess) {
+                      return ListView.builder(
+                        itemCount: todos.length,
+                        itemBuilder: (context, index) {
+                          todos = todos;
+                          return ActivityBox(
+                            id: todos[index].id!,
+                            title: todos[index].title,
+                            startTime: todos[index].startTime,
+                            endTime: todos[index].endTime,
                           );
                         },
                       );

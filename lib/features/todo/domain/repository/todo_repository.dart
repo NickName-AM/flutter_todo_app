@@ -11,4 +11,6 @@ abstract interface class TodoRepository {
   });
 
   Future<Either<Failure, List<Todo>>> getAllTodos();
+
+  Future<Either<Failure, void>> deleteTodo({required int id});
 }

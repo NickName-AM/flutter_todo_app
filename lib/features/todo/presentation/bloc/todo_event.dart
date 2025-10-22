@@ -18,3 +18,9 @@ class TodoCreateRequested extends TodoEvent {
 }
 
 class TodoListRequested extends TodoEvent {}
+
+class TodoDeleteRequested extends TodoEvent {
+  final int id;
+
+  TodoDeleteRequested({required this.id});
+}

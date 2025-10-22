@@ -19,6 +19,8 @@ final class TodoListSuccess extends TodoState {
   TodoListSuccess({required this.todos});
 }
 
+final class TodoDeleteSuccess extends TodoState {}
+
 final class TodoFailure extends TodoState {
   final String message;
 
