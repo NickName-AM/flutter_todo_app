@@ -54,8 +54,10 @@ flutter run
 
 
 ## Demo Images
+<p align="center">
 <img src="images/Screenshot_2025-10-22-18-42-16-221_com.example.flutter_todo_app.jpg" width="200" />
 <img src="images/Screenshot_2025-10-22-18-42-38-343_com.example.flutter_todo_app.jpg" width="200" />
 <img src="images/Screenshot_2025-10-22-18-45-43-993_com.example.flutter_todo_app.jpg" width="200" />
 <img src="images/Screenshot_2025-10-22-18-43-37-768_com.example.flutter_todo_app.jpg" width="200" />
 <img src="images/Screenshot_2025-10-22-18-44-17-698_com.example.flutter_todo_app.jpg" width="200" />
+</p>
